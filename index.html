@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avast Tech — Building Smarter Technology for a Better Future</title>
+<meta name="description" content="Avast Tech is a technology partner for startups, businesses, and enterprises — web, mobile, cloud, AI, cybersecurity, and UI/UX under one roof.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-950:#080B1F;
+  --navy-900:#0B1130;
+  --navy-800:#121A44;
+  --navy-700:#1B2557;
+  --indigo:#4F46E5;
+  --violet:#7C3AED;
+  --cyan:#22D3EE;
+  --paper:#F5F7FF;
+  --slate:#9AA3C4;
+  --slate-dim:#6B739A;
+  --line:rgba(255,255,255,0.08);
+  --radius-lg:28px;
+  --radius-md:18px;
+  --radius-sm:12px;
+  --ease:cubic-bezier(.16,.8,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--navy-950);
+  color:var(--paper);
+  font-family:'Inter',sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:-0.02em;color:var(--paper);}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;display:block;}
+.mono{font-family:'JetBrains Mono',monospace;}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px;}
+section{position:relative;}
+::selection{background:var(--violet);color:#fff;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+}
+
+/* ---------- Background atmosphere ---------- */
+#bg-canvas{position:fixed;inset:0;z-index:0;opacity:0.55;pointer-events:none;}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0.03;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:20px 0;transition:all .4s var(--ease);
+}
+.nav.scrolled{padding:12px 0;background:rgba(8,11,31,0.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.25rem;}
+.logo-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--indigo),var(--cyan));position:relative;flex-shrink:0;}
+.logo-mark::after{content:"";position:absolute;inset:8px;border-radius:4px;border:2px solid rgba(255,255,255,.85);}
+.nav-links{display:flex;gap:38px;align-items:center;}
+.nav-links a{font-size:.94rem;color:var(--slate);transition:color .25s;position:relative;}
+.nav-links a:hover{color:var(--paper);}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--cyan);transition:width .3s var(--ease);}
+.nav-links a:hover::after{width:100%;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 26px;border-radius:100px;font-weight:600;font-size:.92rem;
+  cursor:pointer;border:none;transition:all .3s var(--ease);white-space:nowrap;
+}
+.btn-primary{background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;box-shadow:0 0 0 0 rgba(124,58,237,0.5);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px -6px rgba(124,58,237,0.6);}
+.btn-ghost{background:transparent;color:var(--paper);border:1px solid var(--line);}
+.btn-ghost:hover{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.04);}
+.btn-sm{padding:10px 20px;font-size:.85rem;}
+.nav-cta{display:flex;align-items:center;gap:14px;}
+.burger{display:none;width:26px;height:20px;position:relative;cursor:pointer;background:none;border:none;}
+.burger span{position:absolute;left:0;width:100%;height:2px;background:#fff;transition:.3s;}
+.burger span:nth-child(1){top:0;}
+.burger span:nth-child(2){top:9px;}
+.burger span:nth-child(3){top:18px;}
+.burger.open span:nth-child(1){transform:translateY(9px) rotate(45deg);}
+.burger.open span:nth-child(2){opacity:0;}
+.burger.open span:nth-child(3){transform:translateY(-9px) rotate(-45deg);}
+.mobile-menu{position:fixed;top:0;right:-100%;width:78%;max-width:340px;height:100vh;
+  background:var(--navy-900);border-left:1px solid var(--line);z-index:99;
+  padding:100px 32px 40px;transition:right .4s var(--ease);display:flex;flex-direction:column;gap:26px;
+}
+.mobile-menu.open{right:0;}
+.mobile-menu a{font-size:1.1rem;color:var(--paper);}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:98;opacity:0;pointer-events:none;transition:opacity .3s;}
+.overlay.open{opacity:1;pointer-events:auto;}
+
+/* ---------- Hero ---------- */
+.hero{min-height:100vh;display:flex;align-items:center;padding:150px 0 90px;position:relative;z-index:2;}
+.hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:60px;align-items:center;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:100px;
+  border:1px solid var(--line);background:rgba(79,70,229,0.08);font-size:.8rem;color:var(--cyan);
+  font-family:'JetBrains Mono',monospace;margin-bottom:26px;letter-spacing:.02em;
+}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse-dot 2s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:.35;}}
+.hero h1{font-size:clamp(2.4rem,4.6vw,4.1rem);line-height:1.06;margin-bottom:22px;}
+.hero h1 .grad{background:linear-gradient(100deg,var(--cyan),var(--indigo) 60%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero p{font-size:1.12rem;color:var(--slate);max-width:520px;margin-bottom:36px;}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:56px;}
+.hero-stats{display:flex;gap:0;border-top:1px solid var(--line);padding-top:28px;max-width:520px;}
+.hero-stats .stat{flex:1;padding-right:20px;}
+.hero-stats .stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:1.9rem;color:#fff;}
+.hero-stats .stat span{font-size:.82rem;color:var(--slate-dim);}
+
+/* Signature visual: blob-cut skyline echoing the flyer */
+.hero-visual{position:relative;height:520px;display:flex;align-items:center;justify-content:center;}
+.blob-shape{
+  width:420px;height:460px;position:relative;
+  background:linear-gradient(160deg,var(--navy-700),var(--navy-800) 60%);
+  clip-path:path('M210,0 C330,0 420,90 415,210 C410,330 340,460 205,460 C80,460 0,340 5,210 C10,90 90,0 210,0 Z');
+  border:1px solid rgba(255,255,255,.08);
+  overflow:hidden;
+  box-shadow:0 0 0 1px rgba(255,255,255,.02), 0 40px 90px -30px rgba(79,70,229,0.45);
+}
+.blob-shape::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 30% 20%, rgba(34,211,238,.35), transparent 55%),
+             radial-gradient(circle at 75% 80%, rgba(124,58,237,.45), transparent 55%);
+  mix-blend-mode:screen;
+}
+.skyline{position:absolute;bottom:0;left:0;right:0;height:62%;display:flex;align-items:flex-end;gap:6px;padding:0 14px;}
+.skyline i{display:block;flex:1;background:linear-gradient(180deg,rgba(34,211,238,.55),rgba(79,70,229,.15));border-radius:3px 3px 0 0;}
+.orbit-ring{position:absolute;border:1px solid rgba(255,255,255,.12);border-radius:50%;animation:spin 26s linear infinite;}
+.orbit-ring.r1{width:560px;height:560px;top:-30px;left:-70px;}
+.orbit-ring.r2{width:640px;height:640px;top:-70px;left:-110px;border-style:dashed;animation-duration:40s;animation-direction:reverse;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.node{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px var(--cyan);}
+.float-card{position:absolute;background:rgba(18,26,68,.85);backdrop-filter:blur(10px);border:1px solid var(--line);
+  border-radius:14px;padding:12px 16px;font-size:.8rem;display:flex;align-items:center;gap:10px;
+  box-shadow:0 20px 40px -20px rgba(0,0,0,.6);animation:float 5s ease-in-out infinite;
+}
+.float-card .dot{width:8px;height:8px;border-radius:50%;background:#34D399;box-shadow:0 0 8px #34D399;}
+.float-card.fc1{top:6%;right:-4%;animation-delay:0s;}
+.float-card.fc2{bottom:10%;left:-8%;animation-delay:1.4s;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+
+/* ---------- Section headers ---------- */
+.sec-head{max-width:640px;margin-bottom:60px;}
+.sec-head.center{margin-left:auto;margin-right:auto;text-align:center;}
+.tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--cyan);
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px;}
+.sec-head h2{font-size:clamp(1.8rem,3vw,2.6rem);margin-bottom:14px;}
+.sec-head p{color:var(--slate);font-size:1.02rem;}
+.section-pad{padding:120px 0;}
+
+/* ---------- About ---------- */
+.about{background:linear-gradient(180deg,transparent,rgba(18,26,68,.35) 15%,rgba(18,26,68,.35) 85%,transparent);}
+.about-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:70px;align-items:start;}
+.about-copy p{color:var(--slate);margin-bottom:18px;}
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px;}
+.pillar{padding:26px;border:1px solid var(--line);border-radius:var(--radius-md);background:rgba(255,255,255,.02);transition:.3s var(--ease);}
+.pillar:hover{border-color:rgba(124,58,237,.4);background:rgba(124,58,237,.06);transform:translateY(-4px);}
+.pillar h4{font-size:1rem;margin-bottom:8px;}
+.pillar p{color:var(--slate-dim);font-size:.88rem;margin:0;}
+
+.values-strip{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius-md);overflow:hidden;}
+.value-cell{background:var(--navy-900);padding:26px 22px;}
+.value-cell .num{font-family:'JetBrains Mono',monospace;color:var(--cyan);font-size:.78rem;}
+.value-cell h5{margin:10px 0 6px;font-size:1rem;}
+.value-cell p{color:var(--slate-dim);font-size:.85rem;margin:0;}
+
+.team{margin-top:90px;}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+.team-card{text-align:center;}
+.team-photo{width:100%;aspect-ratio:1;border-radius:var(--radius-md);
+  background:linear-gradient(160deg,var(--navy-700),var(--navy-800));position:relative;overflow:hidden;margin-bottom:16px;
+  border:1px solid var(--line);
+}
+.team-photo::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 30%, rgba(34,211,238,.25), transparent 60%);}
+.team-photo svg{position:absolute;bottom:-6%;left:50%;transform:translateX(-50%);width:78%;opacity:.9;}
+.team-card h4{font-size:1rem;margin-bottom:2px;}
+.team-card span{font-size:.82rem;color:var(--slate-dim);}
+
+/* ---------- Services ---------- */
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+.svc-card{padding:30px 26px;border:1px solid var(--line);border-radius:var(--radius-md);
+  background:rgba(255,255,255,.02);transition:.35s var(--ease);position:relative;overflow:hidden;
+}
+.svc-card::before{content:"";position:absolute;top:-40%;right:-40%;width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle, rgba(124,58,237,.25), transparent 70%);opacity:0;transition:opacity .4s;
+}
+.svc-card:hover{transform:translateY(-6px);border-color:rgba(124,58,237,.45);box-shadow:0 24px 50px -24px rgba(79,70,229,.5);}
+.svc-card:hover::before{opacity:1;}
+.svc-icon{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--indigo),var(--cyan));
+  display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
+.svc-icon svg{width:22px;height:22px;stroke:#fff;}
+.svc-card h3{font-size:1.08rem;margin-bottom:10px;}
+.svc-card p{color:var(--slate-dim);font-size:.88rem;margin-bottom:20px;}
+.svc-link{font-size:.85rem;color:var(--cyan);display:inline-flex;align-items:center;gap:6px;font-weight:600;}
+.svc-link svg{width:14px;height:14px;transition:transform .25s;}
+.svc-card:hover .svc-link svg{transform:translateX(4px);}
+
+/* ---------- Portfolio ---------- */
+.portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+.proj-card{border:1px solid var(--line);border-radius:var(--radius-md);overflow:hidden;background:rgba(255,255,255,.02);transition:.35s var(--ease);}
+.proj-card:hover{transform:translateY(-6px);border-color:rgba(34,211,238,.4);}
+.proj-thumb{height:190px;position:relative;background:linear-gradient(150deg,var(--navy-700),var(--navy-900));overflow:hidden;}
+.proj-thumb .mesh{position:absolute;inset:0;}
+.proj-body{padding:24px;}
+.proj-body h3{font-size:1.05rem;margin-bottom:8px;}
+.proj-body p{color:var(--slate-dim);font-size:.87rem;margin-bottom:16px;}
+.tech-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.tech-tags span{font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:5px 10px;border-radius:6px;
+  background:rgba(79,70,229,.12);color:#B4B8FF;border:1px solid rgba(79,70,229,.25);}
+.proj-link{font-size:.85rem;font-weight:600;color:var(--paper);display:inline-flex;align-items:center;gap:6px;
+  border-bottom:1px solid var(--cyan);padding-bottom:2px;}
+
+/* ---------- Why choose us ---------- */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.why-list{display:flex;flex-direction:column;gap:4px;}
+.why-item{display:flex;gap:18px;padding:22px 0;border-bottom:1px solid var(--line);}
+.why-item:last-child{border-bottom:none;}
+.why-ico{width:38px;height:38px;flex-shrink:0;border-radius:10px;border:1px solid rgba(34,211,238,.35);
+  display:flex;align-items:center;justify-content:center;color:var(--cyan);}
+.why-ico svg{width:18px;height:18px;}
+.why-item h4{font-size:1rem;margin-bottom:4px;}
+.why-item p{color:var(--slate-dim);font-size:.86rem;margin:0;}
+.why-visual{position:relative;height:440px;border-radius:var(--radius-lg);
+  background:linear-gradient(160deg,var(--navy-800),var(--navy-900));border:1px solid var(--line);overflow:hidden;
+}
+.why-visual::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(circle at 20% 15%, rgba(79,70,229,.4), transparent 45%),
+  radial-gradient(circle at 85% 75%, rgba(34,211,238,.3), transparent 45%);}
+.metric-badge{position:absolute;background:rgba(8,11,31,.75);backdrop-filter:blur(10px);border:1px solid var(--line);
+  border-radius:16px;padding:18px 22px;}
+.metric-badge b{display:block;font-family:'Space Grotesk',sans-serif;font-size:1.7rem;}
+.metric-badge span{font-size:.78rem;color:var(--slate-dim);}
+.mb1{top:10%;left:8%;}
+.mb2{bottom:12%;right:8%;}
+
+/* ---------- Testimonials ---------- */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.testi-card{padding:30px;border-radius:var(--radius-md);border:1px solid var(--line);background:rgba(255,255,255,.02);}
+.stars{color:#FBBF24;font-size:.9rem;margin-bottom:16px;letter-spacing:2px;}
+.testi-card p{color:#D6D9EE;font-size:.94rem;margin-bottom:24px;}
+.testi-person{display:flex;align-items:center;gap:12px;}
+.avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--indigo),var(--cyan));
+  display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.9rem;}
+.testi-person h5{font-size:.9rem;}
+.testi-person span{font-size:.78rem;color:var(--slate-dim);}
+
+/* ---------- Contact ---------- */
+.contact-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:60px;}
+.contact-info-card{padding:34px;border-radius:var(--radius-lg);border:1px solid var(--line);
+  background:linear-gradient(160deg,rgba(79,70,229,.12),rgba(34,211,238,.05));height:fit-content;}
+.contact-info-card h3{font-size:1.3rem;margin-bottom:14px;}
+.contact-info-card > p{color:var(--slate);font-size:.92rem;margin-bottom:30px;}
+.info-row{display:flex;gap:14px;padding:16px 0;border-top:1px solid var(--line);}
+.info-row:first-of-type{border-top:1px solid var(--line);}
+.info-ico{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.info-ico svg{width:16px;height:16px;color:var(--cyan);}
+.info-row h5{font-size:.85rem;color:var(--slate-dim);margin-bottom:2px;font-weight:500;}
+.info-row p{font-size:.94rem;color:var(--paper);}
+.social-row{display:flex;gap:10px;margin-top:26px;}
+.social-row a{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;transition:.25s;}
+.social-row a:hover{background:var(--cyan);border-color:var(--cyan);color:var(--navy-950);}
+.social-row svg{width:16px;height:16px;}
+
+.form-card{padding:36px;border-radius:var(--radius-lg);border:1px solid var(--line);background:rgba(255,255,255,.02);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.field{margin-bottom:20px;}
+.field label{display:block;font-size:.82rem;color:var(--slate);margin-bottom:8px;}
+.field input,.field textarea{width:100%;padding:13px 16px;border-radius:10px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03);color:var(--paper);font-family:'Inter',sans-serif;font-size:.92rem;transition:.25s;}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--cyan);background:rgba(34,211,238,.04);box-shadow:0 0 0 4px rgba(34,211,238,.08);}
+.field textarea{resize:vertical;min-height:120px;}
+.form-note{font-size:.8rem;color:var(--slate-dim);margin-top:14px;}
+.form-success{display:none;align-items:center;gap:10px;padding:14px 18px;border-radius:10px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.35);color:#6EE7B7;font-size:.88rem;margin-top:16px;}
+.form-success.show{display:flex;}
+
+/* ---------- Final CTA ---------- */
+.final-cta{text-align:center;padding:110px 0;position:relative;}
+.final-cta-inner{max-width:640px;margin:0 auto;position:relative;z-index:2;}
+.final-cta h2{font-size:clamp(1.9rem,3.4vw,3rem);margin-bottom:18px;}
+.final-cta p{color:var(--slate);margin-bottom:36px;}
+.cta-glow{position:absolute;top:50%;left:50%;width:600px;height:600px;transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(124,58,237,.28), transparent 65%);z-index:0;}
+
+/* ---------- Footer ---------- */
+footer{border-top:1px solid var(--line);padding:70px 0 30px;position:relative;z-index:2;}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.1fr;gap:50px;margin-bottom:60px;}
+.footer-brand p{color:var(--slate-dim);font-size:.88rem;margin:16px 0 22px;max-width:280px;}
+.footer-col h5{font-size:.85rem;color:var(--slate);margin-bottom:18px;letter-spacing:.03em;text-transform:uppercase;}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:12px;}
+.footer-col a{color:var(--slate-dim);font-size:.88rem;transition:color .25s;}
+.footer-col a:hover{color:var(--cyan);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--line);flex-wrap:wrap;gap:16px;}
+.footer-bottom p{font-size:.82rem;color:var(--slate-dim);}
+.footer-legal{display:flex;gap:24px;}
+.footer-legal a{font-size:.82rem;color:var(--slate-dim);}
+.footer-legal a:hover{color:var(--paper);}
+
+/* ---------- Reveal on scroll ---------- */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease), transform .8s var(--ease);}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1024px){
+  .hero-grid,.about-grid,.why-grid,.contact-grid{grid-template-columns:1fr;}
+  .hero-visual{order:-1;height:380px;margin-bottom:20px;}
+  .services-grid{grid-template-columns:repeat(2,1fr);}
+  .portfolio-grid{grid-template-columns:repeat(2,1fr);}
+  .team-grid{grid-template-columns:repeat(2,1fr);}
+  .values-strip{grid-template-columns:repeat(2,1fr);}
+  .testi-grid{grid-template-columns:1fr 1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:768px){
+  .nav-links{display:none;}
+  .nav-cta .btn-ghost{display:none;}
+  .burger{display:block;}
+  .wrap{padding:0 22px;}
+  .section-pad{padding:80px 0;}
+  .services-grid,.portfolio-grid,.team-grid,.testi-grid,.footer-grid{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .hero-stats{flex-wrap:wrap;gap:20px;}
+  .hero-stats .stat{flex:0 0 45%;}
+  .footer-bottom{flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="grain"></div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#home" class="logo"><span class="logo-mark"></span>Avast Tech</a>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#contact" class="btn btn-ghost btn-sm">Contact</a>
+      <a href="#contact" class="btn btn-primary btn-sm">Get Started</a>
+      <button class="burger" id="burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="overlay" id="overlay"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#projects">Projects</a>
+  <a href="#contact">Contact</a>
+  <a href="#contact" class="btn btn-primary" style="margin-top:10px;">Get Started</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <div class="eyebrow"><span class="eyebrow-dot"></span>Avast Tech · Technology Partner</div>
+      <h1>Building <span class="grad">Smarter Technology</span> for a Better Future.</h1>
+      <p>Avast Tech designs, builds, and secures the software that startups, businesses, and enterprises run on — from first prototype to planet-scale infrastructure.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary">Get Started</a>
+        <a href="#services" class="btn btn-ghost">Explore Our Services</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b class="mono" data-count="240">0</b><span>Projects completed</span></div>
+        <div class="stat"><b class="mono" data-count="120">0</b><span>Clients served</span></div>
+        <div class="stat"><b class="mono" data-count="9">0</b><span>Years of experience</span></div>
+      </div>
+    </div>
+    <div class="hero-visual reveal in">
+      <div class="orbit-ring r2"></div>
+      <div class="orbit-ring r1"></div>
+      <div class="blob-shape">
+        <div class="skyline" id="skyline"></div>
+      </div>
+      <div class="float-card fc1"><span class="dot"></span> Deployment successful</div>
+      <div class="float-card fc2"><span class="dot"></span> Threat scan: 0 issues</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about section-pad" id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="tag">About Avast Tech</div>
+        <h2>A technology partner, not just a vendor.</h2>
+      </div>
+      <div class="about-copy reveal">
+        <p>Avast Tech started as a three-person engineering team solving infrastructure problems for local startups. Nine years later, we're a full-stack technology partner trusted by founders and enterprise IT leaders alike — but the founding principle hasn't changed: build things that work, explain them in plain language, and stand behind them long after launch.</p>
+        <p>Our mission is to make advanced technology — cloud, AI, and secure software — accessible to organizations of any size. Our vision is a future where smaller teams can compete with the biggest players because the technology gap has closed.</p>
+        <div class="pillars">
+          <div class="pillar"><h4>Engineering-led</h4><p>Every account is run by people who can read the code, not just the roadmap.</p></div>
+          <div class="pillar"><h4>Security by default</h4><p>We treat security as a design constraint, not a feature we bolt on later.</p></div>
+          <div class="pillar"><h4>Built to scale</h4><p>Architecture decisions are made for the traffic you'll have in year three.</p></div>
+          <div class="pillar"><h4>Transparent delivery</h4><p>Fixed milestones, visible progress, and no surprise invoices.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="values-strip reveal">
+      <div class="value-cell"><div class="num">01</div><h5>Integrity</h5><p>We tell clients what they need to hear, not what's easiest to say.</p></div>
+      <div class="value-cell"><div class="num">02</div><h5>Craft</h5><p>Clean architecture and readable code, because someone maintains this after us.</p></div>
+      <div class="value-cell"><div class="num">03</div><h5>Curiosity</h5><p>We evaluate new tools constantly so your stack doesn't fall behind.</p></div>
+      <div class="value-cell"><div class="num">04</div><h5>Accountability</h5><p>If something breaks, you'll hear from us before you have to ask.</p></div>
+    </div>
+
+    <div class="team reveal">
+      <div class="sec-head" style="margin-bottom:40px;">
+        <div class="tag">Leadership</div>
+        <h2>The team behind the work.</h2>
+      </div>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-photo"><svg viewBox="0 0 100 60"><circle cx="50" cy="18" r="14" fill="rgba(255,255,255,.85)"/><path d="M20,60 Q50,30 80,60 Z" fill="rgba(255,255,255,.85)"/></svg></div>
+          <h4>Daniel Osei</h4><span>Chief Executive Officer</span>
+        </div>
+        <div class="team-card">
+          <div class="team-photo"><svg viewBox="0 0 100 60"><circle cx="50" cy="18" r="14" fill="rgba(255,255,255,.85)"/><path d="M20,60 Q50,30 80,60 Z" fill="rgba(255,255,255,.85)"/></svg></div>
+          <h4>Priya Nair</h4><span>Chief Technology Officer</span>
+        </div>
+        <div class="team-card">
+          <div class="team-photo"><svg viewBox="0 0 100 60"><circle cx="50" cy="18" r="14" fill="rgba(255,255,255,.85)"/><path d="M20,60 Q50,30 80,60 Z" fill="rgba(255,255,255,.85)"/></svg></div>
+          <h4>Marcus Chen</h4><span>Head of Cybersecurity</span>
+        </div>
+        <div class="team-card">
+          <div class="team-photo"><svg viewBox="0 0 100 60"><circle cx="50" cy="18" r="14" fill="rgba(255,255,255,.85)"/><path d="M20,60 Q50,30 80,60 Z" fill="rgba(255,255,255,.85)"/></svg></div>
+          <h4>Elena Vasquez</h4><span>Head of Design</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section-pad" id="services">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="tag">What we do</div>
+      <h2>Full-stack technology services, under one roof.</h2>
+      <p>From a first product build to hardening enterprise infrastructure — pick a single service or lean on us end to end.</p>
+    </div>
+    <div class="services-grid">
+      <!-- 8 services -->
+      <div class="svc-card reveal">
+        <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3"/></svg></div>
+        <h3>Web Development</h3>
+        <p>Fast, accessible websites and web apps built on modern frameworks and clean architecture.</p>
+        <a class="svc-link" href="#contact">Learn more <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+        <h3>Mobile App Development</h3>
+        <p>Native and cross-platform apps for iOS and Android, designed for retention and speed.</p>
+        <a class="svc-link" href="#contact">Learn more <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M4 17l6-6-6-6M12 19h8"/></svg></div>
+        <h3>Software Development</h3>
+        <p>Custom platforms and internal tools engineered around how your team actually works.</p>
+        <a class="svc-link" href="#contact">Learn more <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M17.5 19H8a5 5 0 1 1 1.5-9.8A6 6 0 0 1 21 11a4 4 0 0 1-3.5 8z"/></svg></div>
+        <h3>Cloud Solutions</h3>
+        <p>Cloud architecture, migration, and cost optimization across AWS, Azure, and GCP.</p>
+        <a class="svc-link" href="#contact">Learn more <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg></div>
+        <h3>Cybersecurity</h3>
+        <p>Penetration testing, audits, and monitoring that keep your systems and data protected.</p>
+        <a class="svc-link" href="#contact">Learn more <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></div>
+        <h3>AI &amp; Machine Learning</h3>
+        <p>Custom models, automation, and applied AI features that solve real operational problems.</p>
+        <a class="svc-link" href="#contact">Learn more <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M9 21h6M12 17v4M5 3h14l-1 10a6 6 0 0 1-12 0L5 3z"/></svg></div>
+        <h3>IT Consulting</h3>
+        <p>Independent technical advice on architecture, vendor choice, and team structure.</p>
+        <a class="svc-link" href="#contact">Learn more <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="svc-card reveal">
+        <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        <h3>UI/UX Design</h3>
+        <p>Interfaces designed around real user behavior, not just visual trends.</p>
+        <a class="svc-link" href="#contact">Learn more <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section-pad" id="projects" style="background:linear-gradient(180deg,transparent,rgba(18,26,68,.35) 15%,rgba(18,26,68,.35) 85%,transparent);">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="tag">Selected work</div>
+      <h2>Projects we're proud to have shipped.</h2>
+      <p>A sample of platforms, apps, and systems built by the Avast Tech team.</p>
+    </div>
+    <div class="portfolio-grid">
+      <div class="proj-card reveal">
+        <div class="proj-thumb"><div class="mesh" style="background:radial-gradient(circle at 30% 30%, rgba(34,211,238,.35), transparent 55%), radial-gradient(circle at 75% 70%, rgba(124,58,237,.4), transparent 55%);"></div></div>
+        <div class="proj-body">
+          <h3>Northline Banking Platform</h3>
+          <p>A digital-first banking dashboard handling real-time transactions for 80,000+ users.</p>
+          <div class="tech-tags"><span>React</span><span>Node.js</span><span>AWS</span></div>
+          <a class="proj-link" href="#contact">View project →</a>
+        </div>
+      </div>
+      <div class="proj-card reveal">
+        <div class="proj-thumb"><div class="mesh" style="background:radial-gradient(circle at 70% 25%, rgba(79,70,229,.4), transparent 55%), radial-gradient(circle at 20% 75%, rgba(34,211,238,.3), transparent 55%);"></div></div>
+        <div class="proj-body">
+          <h3>Harvestly Logistics App</h3>
+          <p>Route optimization and live tracking mobile app for a regional delivery fleet.</p>
+          <div class="tech-tags"><span>Flutter</span><span>Firebase</span><span>ML Kit</span></div>
+          <a class="proj-link" href="#contact">View project →</a>
+        </div>
+      </div>
+      <div class="proj-card reveal">
+        <div class="proj-thumb"><div class="mesh" style="background:radial-gradient(circle at 50% 20%, rgba(34,211,238,.4), transparent 55%), radial-gradient(circle at 80% 80%, rgba(79,70,229,.35), transparent 55%);"></div></div>
+        <div class="proj-body">
+          <h3>Ledgerline Fraud Detection</h3>
+          <p>Machine learning pipeline flagging fraudulent transactions in under 200ms.</p>
+          <div class="tech-tags"><span>Python</span><span>TensorFlow</span><span>Kafka</span></div>
+          <a class="proj-link" href="#contact">View project →</a>
+        </div>
+      </div>
+      <div class="proj-card reveal">
+        <div class="proj-thumb"><div class="mesh" style="background:radial-gradient(circle at 25% 70%, rgba(124,58,237,.4), transparent 55%), radial-gradient(circle at 75% 30%, rgba(34,211,238,.3), transparent 55%);"></div></div>
+        <div class="proj-body">
+          <h3>Vaultkeep Security Suite</h3>
+          <p>Continuous vulnerability scanning and compliance reporting for mid-size enterprises.</p>
+          <div class="tech-tags"><span>Go</span><span>Kubernetes</span><span>SOC 2</span></div>
+          <a class="proj-link" href="#contact">View project →</a>
+        </div>
+      </div>
+      <div class="proj-card reveal">
+        <div class="proj-thumb"><div class="mesh" style="background:radial-gradient(circle at 60% 60%, rgba(34,211,238,.35), transparent 55%), radial-gradient(circle at 20% 20%, rgba(124,58,237,.35), transparent 55%);"></div></div>
+        <div class="proj-body">
+          <h3>Studiofront Booking Portal</h3>
+          <p>A booking and CRM platform for a chain of 40+ creative studios.</p>
+          <div class="tech-tags"><span>Next.js</span><span>PostgreSQL</span><span>Stripe</span></div>
+          <a class="proj-link" href="#contact">View project →</a>
+        </div>
+      </div>
+      <div class="proj-card reveal">
+        <div class="proj-thumb"><div class="mesh" style="background:radial-gradient(circle at 40% 40%, rgba(79,70,229,.4), transparent 55%), radial-gradient(circle at 85% 85%, rgba(34,211,238,.3), transparent 55%);"></div></div>
+        <div class="proj-body">
+          <h3>Cirrus Cloud Migration</h3>
+          <p>Full infrastructure migration cutting a manufacturer's cloud spend by 38%.</p>
+          <div class="tech-tags"><span>Terraform</span><span>Azure</span><span>Docker</span></div>
+          <a class="proj-link" href="#contact">View project →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section-pad" id="why">
+  <div class="wrap why-grid">
+    <div class="reveal">
+      <div class="tag">Why choose us</div>
+      <h2 style="font-size:clamp(1.8rem,3vw,2.6rem);margin-bottom:30px;">Technology decisions you won't have to revisit.</h2>
+      <div class="why-list">
+        <div class="why-item">
+          <div class="why-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1 3-6z"/></svg></div>
+          <div><h4>Experienced professionals</h4><p>Senior engineers and designers with real production experience, not just certifications.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="why-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></div>
+          <div><h4>Innovative solutions</h4><p>We evaluate the newest viable tools and apply them where they genuinely help.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="why-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 8v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></div>
+          <div><h4>Reliable support</h4><p>Defined SLAs and a real human on call, not a ticket queue that goes quiet.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="why-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg></div>
+          <div><h4>Security-focused development</h4><p>Threat modeling and secure coding practices built into every sprint.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="why-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17l6-6 4 4 8-8M21 3v6h-6"/></svg></div>
+          <div><h4>Scalable technology</h4><p>Systems built to handle 10x growth without a costly rebuild.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="why-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <div><h4>Customer-focused approach</h4><p>We plan around your business goals first, and pick the stack second.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="why-visual reveal">
+      <div class="metric-badge mb1"><b class="mono">99.9%</b><span>Platform uptime</span></div>
+      <div class="metric-badge mb2"><b class="mono">&lt;24hrs</b><span>Avg. support response</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section-pad" style="background:linear-gradient(180deg,transparent,rgba(18,26,68,.35) 15%,rgba(18,26,68,.35) 85%,transparent);">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="tag">Testimonials</div>
+      <h2>Trusted by teams who build things that matter.</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Avast Tech rebuilt our checkout flow and cut load time in half. Support has been responsive at every stage, not just during the sale."</p>
+        <div class="testi-person"><div class="avatar">R</div><div><h5>Rachel Kim</h5><span>Head of Product, Northline</span></div></div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Their security audit found issues our previous vendor missed for two years. Direct, thorough, and easy to work with."</p>
+        <div class="testi-person"><div class="avatar">D</div><div><h5>David Ferreira</h5><span>CTO, Vaultkeep</span></div></div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"We came in with a rough idea and left with a working app in ten weeks. The team explained every technical tradeoff clearly."</p>
+        <div class="testi-person"><div class="avatar">S</div><div><h5>Sofia Almeida</h5><span>Founder, Harvestly</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section-pad" id="contact">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <div class="tag">Get in touch</div>
+      <h2>Let's talk about what you're building.</h2>
+      <p>Tell us about your project and we'll get back to you within one business day.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info-card reveal">
+        <h3>Contact information</h3>
+        <p>Reach out directly, or use the form and our team will route your message to the right specialist.</p>
+        <div class="info-row">
+          <div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v16H4z" opacity="0"/><path d="M3 6l9 7 9-7M3 6v12h18V6"/></svg></div>
+          <div><h5>Email</h5><p>hello@avasttech.com</p></div>
+        </div>
+        <div class="info-row">
+          <div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2.2z"/></svg></div>
+          <div><h5>Phone</h5><p>+629 0123 4567 891</p></div>
+        </div>
+        <div class="info-row">
+          <div class="info-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><h5>Office</h5><p>500 Innovation Drive, Suite 210<br>San Francisco, CA</p></div>
+        </div>
+        <div class="social-row">
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM3.5 8.5h3.9V21H3.5V8.5zM10 8.5h3.7v1.7h.05c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-3.9v-5.9c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V8.5z"/></svg></a>
+          <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.4-1.3 1.7-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.6 0-1.3-.2-1.8-.5v.1c0 2 1.4 3.6 3.3 4a4 4 0 0 1-1.8.1 4.1 4.1 0 0 0 3.8 2.9A8.3 8.3 0 0 1 2 18.4a11.6 11.6 0 0 0 6.3 1.8c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.1z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7c-.1-.2-.5-1.3.1-2.7 0 0 .9-.3 2.9 1a10 10 0 0 1 5.2 0c2-1.3 2.9-1 2.9-1 .6 1.4.2 2.5.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .3.3.6.9.6 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="form-card reveal">
+        <form id="contactForm">
+          <div class="form-row">
+            <div class="field"><label for="name">Name</label><input type="text" id="name" name="name" placeholder="Jordan Smith" required></div>
+            <div class="field"><label for="email">Email</label><input type="email" id="email" name="email" placeholder="jordan@company.com" required></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="phone">Phone number</label><input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000"></div>
+            <div class="field"><label for="company">Company</label><input type="text" id="company" name="company" placeholder="Company name"></div>
+          </div>
+          <div class="field"><label for="message">Message</label><textarea id="message" name="message" placeholder="Tell us about your project..." required></textarea></div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Send Message</button>
+          <p class="form-note">By submitting, you agree to be contacted about your inquiry. We never share your information.</p>
+          <div class="form-success" id="formSuccess">✓ Thanks — your message has been received. We'll be in touch within one business day.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="cta-glow"></div>
+  <div class="wrap final-cta-inner reveal">
+    <h2>Ready to build something smarter?</h2>
+    <p>Tell us where you're headed — we'll help you get there faster and more securely.</p>
+    <a href="#contact" class="btn btn-primary">Get Started Today</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#home" class="logo"><span class="logo-mark"></span>Avast Tech</a>
+        <p>A full-stack technology partner for startups, businesses, and enterprises — web, mobile, cloud, AI, and security under one roof.</p>
+        <div class="social-row">
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" width="16"><path d="M6.94 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM3.5 8.5h3.9V21H3.5V8.5zM10 8.5h3.7v1.7h.05c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-3.9v-5.9c0-1.4 0-3.2-2-3.2s-2.3 1.5-2.3 3.1V21H10V8.5z"/></svg></a>
+          <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor" width="16"><path d="M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.4-1.3 1.7-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.6 0-1.3-.2-1.8-.5v.1c0 2 1.4 3.6 3.3 4a4 4 0 0 1-1.8.1 4.1 4.1 0 0 0 3.8 2.9A8.3 8.3 0 0 1 2 18.4a11.6 11.6 0 0 0 6.3 1.8c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.1z"/></svg></a>
+          <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" width="16"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7c-.1-.2-.5-1.3.1-2.7 0 0 .9-.3 2.9 1a10 10 0 0 1 5.2 0c2-1.3 2.9-1 2.9-1 .6 1.4.2 2.5.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.4 4.7-4.6 5 .3.3.6.9.6 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#services">Web Development</a></li>
+          <li><a href="#services">Cloud Solutions</a></li>
+          <li><a href="#services">Cybersecurity</a></li>
+          <li><a href="#services">AI &amp; Machine Learning</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <ul>
+          <li>hello@avasttech.com</li>
+          <li>+629 0123 4567 891</li>
+          <li>500 Innovation Drive, Suite 210<br>San Francisco, CA</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Avast Tech. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll state
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 30);
+});
+
+// Mobile menu
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+const overlay = document.getElementById('overlay');
+function closeMenu(){burger.classList.remove('open');mobileMenu.classList.remove('open');overlay.classList.remove('open');}
+burger.addEventListener('click', () => {
+  burger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  overlay.classList.toggle('open');
+});
+overlay.addEventListener('click', closeMenu);
+document.querySelectorAll('.mobile-menu a').forEach(a => a.addEventListener('click', closeMenu));
+
+// Reveal on scroll
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, {threshold:0.15});
+revealEls.forEach(el => io.observe(el));
+
+// Count-up stats
+const counters = document.querySelectorAll('[data-count]');
+const counterIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      const el = e.target;
+      const target = parseInt(el.dataset.count,10);
+      const suffix = target > 50 ? '+' : '';
+      let cur = 0;
+      const step = Math.max(1, Math.round(target/40));
+      const tick = () => {
+        cur += step;
+        if(cur >= target){ el.textContent = target + suffix; return; }
+        el.textContent = cur + suffix;
+        requestAnimationFrame(tick);
+      };
+      tick();
+      counterIO.unobserve(el);
+    }
+  });
+}, {threshold:0.5});
+counters.forEach(c => counterIO.observe(c));
+
+// Build skyline bars in hero blob
+const skyline = document.getElementById('skyline');
+const heights = [40,65,50,80,55,70,45,90,60,75,50,65];
+heights.forEach(h => {
+  const bar = document.createElement('i');
+  bar.style.height = h + '%';
+  skyline.appendChild(bar);
+});
+
+// Contact form (client-side only demo)
+const form = document.getElementById('contactForm');
+const success = document.getElementById('formSuccess');
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  success.classList.add('show');
+  form.reset();
+  setTimeout(() => success.classList.remove('show'), 6000);
+});
+
+// Ambient particle network background
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let w,h,particles;
+function resize(){
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+}
+function initParticles(){
+  const count = window.innerWidth < 768 ? 30 : 60;
+  particles = Array.from({length:count}, () => ({
+    x: Math.random()*w, y: Math.random()*h,
+    vx: (Math.random()-0.5)*0.25, vy:(Math.random()-0.5)*0.25
+  }));
+}
+resize(); initParticles();
+window.addEventListener('resize', () => { resize(); initParticles(); });
+
+function draw(){
+  ctx.clearRect(0,0,w,h);
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if(p.x < 0 || p.x > w) p.vx *= -1;
+    if(p.y < 0 || p.y > h) p.vy *= -1;
+  });
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const a = particles[i], b = particles[j];
+      const dx = a.x-b.x, dy = a.y-b.y;
+      const dist = Math.sqrt(dx*dx+dy*dy);
+      if(dist < 140){
+        ctx.strokeStyle = `rgba(124,58,237,${0.12 * (1-dist/140)})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+      }
+    }
+  }
+  particles.forEach(p => {
+    ctx.fillStyle = 'rgba(34,211,238,0.5)';
+    ctx.beginPath(); ctx.arc(p.x,p.y,1.6,0,Math.PI*2); ctx.fill();
+  });
+  requestAnimationFrame(draw);
+}
+if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  draw();
+} else {
+  canvas.style.display = 'none';
+}
+</script>
+</body>
+</html>
